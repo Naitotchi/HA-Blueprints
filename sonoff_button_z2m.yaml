@@ -1,0 +1,93 @@
+blueprint:
+  name: Zigbee2MQTT – SONOFF SNZB-01P (single/double/long)
+  description: >
+    Handle single, double, and long presses from a SONOFF SNZB-01P via Zigbee2MQTT.
+    Listens on the device's *state topic* (JSON) and matches value_json.action.
+    Works with custom Z2M base topics (e.g., "meridian/zigbee2mqtt")—just set the topic below.
+  domain: automation
+  source_url: https://www.zigbee2mqtt.io/devices/SNZB-01P.html
+
+  input:
+    state_topic:
+      name: Zigbee2MQTT device *state* topic
+      description: >
+        The full MQTT state topic for this button. Usually "zigbee2mqtt/<friendly_name>".
+        Example: zigbee2mqtt/Bedroom_Button  (or meridian/zigbee2mqtt/Bedroom_Button)
+      default: zigbee2mqtt/REPLACE_WITH_FRIENDLY_NAME
+      selector:
+        text: {}
+
+    single_action:
+      name: Action – Single press
+      description: What to do on a single press.
+      default: []
+      selector:
+        action: {}
+
+    double_action:
+      name: Action – Double press
+      description: What to do on a double press.
+      default: []
+      selector:
+        action: {}
+
+    long_action:
+      name: Action – Long press
+      description: What to do on a long press (hold).
+      default: []
+      selector:
+        action: {}
+
+    mode:
+      name: Automation mode
+      description: Behavior if pressed again while actions are still running.
+      default: single
+      selector:
+        select:
+          options:
+            - single
+            - restart
+            - queued
+            - parallel
+
+mode: !input mode
+max_exceeded: silent
+
+trigger:
+  # Single press
+  - id: single
+    platform: mqtt
+    topic: !input state_topic
+    value_template: "{{ value_json.action }}"
+    payload: "single"
+
+  # Double press
+  - id: double
+    platform: mqtt
+    topic: !input state_topic
+    value_template: "{{ value_json.action }}"
+    payload: "double"
+
+  # Long press
+  - id: long
+    platform: mqtt
+    topic: !input state_topic
+    value_template: "{{ value_json.action }}"
+    payload: "long"
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: single
+        sequence: !input single_action
+
+      - conditions:
+          - condition: trigger
+            id: double
+        sequence: !input double_action
+
+      - conditions:
+          - condition: trigger
+            id: long
+        sequence: !input long_action
