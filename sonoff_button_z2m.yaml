@@ -1,9 +1,9 @@
 blueprint:
-  name: Zigbee2MQTT – SONOFF SNZB-01P (single/double/long)
+  name: Zigbee2MQTT – SONOFF Button (single/double/long)
   description: >
-    Handle single, double, and long presses from a SONOFF SNZB-01P via Zigbee2MQTT.
+    Handle single, double, and long presses from a SONOFF Button (SNZB-01P) via Zigbee2MQTT.
     Listens on the device's *state topic* (JSON) and matches value_json.action.
-    Works with custom Z2M base topics (e.g., "meridian/zigbee2mqtt")—just set the topic below.
+    Works with custom Z2M base topics.
   domain: automation
   source_url: https://www.zigbee2mqtt.io/devices/SNZB-01P.html
 
@@ -12,7 +12,7 @@ blueprint:
       name: Zigbee2MQTT device *state* topic
       description: >
         The full MQTT state topic for this button. Usually "zigbee2mqtt/<friendly_name>".
-        Example: zigbee2mqtt/Bedroom_Button  (or meridian/zigbee2mqtt/Bedroom_Button)
+        Example: zigbee2mqtt/Bedroom_Button  (or location/zigbee2mqtt/Bedroom_Button)
       default: zigbee2mqtt/REPLACE_WITH_FRIENDLY_NAME
       selector:
         text: {}
